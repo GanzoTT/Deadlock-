@@ -1,7 +1,8 @@
 # Deadlock en Ejecución de Hilos: Ejemplo de Solución
 
 Este repositorio contiene un ejemplo de código en C que resuelve el problema clásico de deadlock en un programa con múltiples hilos, mediante el uso de un semáforo para sincronización controlada. El ejemplo simula una situación en la que dos personas deben coordinarse para pedir y aceptar disculpas sin caer en un estado de bloqueo mutuo.
-Introducción
+
+## Introducción
 
 El deadlock ocurre cuando dos o más hilos quedan esperando indefinidamente la liberación de recursos que otro hilo posee, creando una espera circular y un bloqueo en la ejecución. Este ejemplo simplifica la lógica del programa para eliminar la posibilidad de espera circular, haciendo que los hilos actúen de forma secuencial y sin bloquearse entre sí.
 
@@ -20,8 +21,8 @@ El deadlock ocurre cuando dos o más hilos quedan esperando indefinidamente la l
 ### Ejecución del Código
 
 Sigue estos pasos para compilar y ejecutar el programa:  
-  Requisitos previos
 
+    Requisitos previos:
     - Asegúrate de tener gcc (compilador de C) y la biblioteca de pthread instalada.
 
 ### Compilación y Ejecución
