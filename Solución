@@ -1,0 +1,78 @@
+
+El problema que describes se basa en un escenario clásico de deadlock, donde dos hilos esperan indefinidamente por recursos que cada uno tiene que liberar, causando un bloqueo. Para resolver este problema, podemos modificar la lógica del programa de manera que se elimine la espera circular.
+
+Una forma común de abordar esto es asegurar que los hilos actúen de manera secuencial y no se queden esperando el uno al otro. Una estrategia efectiva es hacer que ambos hilos se sincronicen de una manera más controlada.
+
+Aquí te muestro cómo podrías modificar el código para evitar el deadlock:
+
+Utilizar una variable de estado para manejar quién tiene que pedir perdón y quién tiene que aceptar el error.
+Utilizar un solo semáforo para sincronizar ambos hilos.
+Aquí está el código modificado:
+
+c
+Copiar código
+#include <pthread.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+sem_t semaforo;
+
+void* pedirPerdon(void *arg) {
+    char *persona = arg;
+    printf("%s: Estoy pidiendo perdón...\n", persona);
+    sleep(1);  // Simulación de tiempo de reflexión
+    printf("%s: Perdooon\n", persona);
+    
+    // Señalizar que se ha pedido perdón
+    sem_post(&semaforo);
+    
+    return NULL;
+}
+
+void* aceptarError(void *arg) {
+    char *persona = arg;
+    printf("%s: Estoy esperando que se pida perdón...\n", persona);
+    
+    // Esperar a que se pida perdón
+    sem_wait(&semaforo);
+    
+    printf("%s: Acepto mi error\n", persona);
+    
+    return NULL;
+}
+
+int main() {
+    pthread_t hombre, mujer;
+
+    // Inicializar el semáforo
+    sem_init(&semaforo, 0, 0);
+
+    srand(time(NULL));
+
+    printf("@!#?@!\n");
+    sleep(1);
+    printf("-------------------\n");
+    printf("Discusión acabada\n");
+
+    // Crear hilos dependiendo del azar
+    if (rand() % 2) {
+        pthread_create(&hombre, NULL, pedirPerdon, "👨");
+        pthread_create(&mujer, NULL, aceptarError, "👩");
+    } else {
+        pthread_create(&mujer, NULL, pedirPerdon, "👩");
+        pthread_create(&hombre, NULL, aceptarError, "👨");
+    }
+
+    pthread_join(hombre, NULL);
+    pthread_join(mujer, NULL);
+
+    // Destruir el semáforo
+    sem_destroy(&semaforo);
+    return 0;
+}
+Cambios realizados:
+Eliminación de semáforos separados: Se ha reducido el uso de semáforos a uno solo (semaforo) para controlar el flujo entre los hilos.
+Secuencia de ejecución: El hilo que pide perdón ahora simplemente notifica al otro hilo cuando ha realizado su acción, eliminando la posibilidad de espera circular.
