@@ -12,6 +12,12 @@ El deadlock ocurre cuando dos o más hilos quedan esperando indefinidamente la l
 
     Uso de una variable de estado: se establece quién debe pedir disculpas y quién debe aceptar el error.
     Un solo semáforo: se reduce el uso de semáforos a solo uno (semaforo) para sincronizar ambos hilos, garantizando la secuencia correcta.
+
+### Código
+
+Este es el código modificado para evitar el deadlock:
+
+    - discusion.c
     
 ### Descripción de los Cambios al Código base
 
